@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import PhoneFrame from "../components/PhoneFrame";
 import TopHeader from "../components/TopHeader";
+import ElasticScroll from "../components/ElasticScroll";
 import { ArrowRightIcon, SparkleIcon } from "../components/icons";
 
 const MESSAGES = [
@@ -43,7 +44,8 @@ export default function Assistant() {
         right={<SparkleIcon size={18} />}
       />
 
-      <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5 pt-2 pb-3 space-y-3">
+      <ElasticScroll className="flex-1 min-h-0 px-5 pt-2 pb-3">
+      <div className="space-y-3">
         {MESSAGES.map((m, i) => (
           <div
             key={i}
@@ -63,6 +65,7 @@ export default function Assistant() {
           </div>
         ))}
       </div>
+      </ElasticScroll>
 
       {/* Suggestion chips */}
       <div className="shrink-0 flex gap-2 px-5 pb-3 overflow-x-auto no-scrollbar">

@@ -91,7 +91,7 @@ export default function Home() {
   return (
     <PhoneFrame>
       {/* Hero section */}
-      <div className="relative h-[42%] min-h-[300px] shrink-0 bg-cream-100">
+      <div className="relative h-[42%] min-h-[300px] shrink-0 bg-cream-100 overflow-hidden">
         <motion.img
           src={HERO}
           alt=""

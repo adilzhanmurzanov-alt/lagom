@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import PhoneFrame from "../components/PhoneFrame";
 import TopHeader from "../components/TopHeader";
+import ElasticScroll from "../components/ElasticScroll";
 import {
   useApp,
   getProductById,
@@ -52,7 +53,7 @@ export default function Cart() {
         </div>
       ) : (
         <>
-          <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5 pt-1 pb-4">
+          <ElasticScroll className="flex-1 min-h-0 px-5 pt-1 pb-4">
             <AnimatePresence initial={false}>
             {items.map(({ product, qty }, index) => (
               <motion.article
@@ -113,7 +114,7 @@ export default function Cart() {
               </motion.article>
             ))}
             </AnimatePresence>
-          </div>
+          </ElasticScroll>
 
           {/* Summary + checkout */}
           <motion.div

@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import PhoneFrame from "../components/PhoneFrame";
+import ElasticScroll from "../components/ElasticScroll";
 import { CATEGORIES } from "../data/store";
 import { useApp } from "../context/AppContext";
 import { HeartIcon } from "../components/icons";
@@ -107,7 +108,7 @@ export default function Store() {
       </div>
 
       {/* Products grid */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-8 no-scrollbar">
+      <ElasticScroll className="flex-1 min-h-0 px-5 pb-8">
         <motion.div
           className="grid grid-cols-2 gap-4"
           initial="initial"
@@ -197,7 +198,7 @@ export default function Store() {
             );
           })}
         </motion.div>
-      </div>
+      </ElasticScroll>
     </PhoneFrame>
   );
 }

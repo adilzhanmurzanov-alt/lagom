@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import PhoneFrame from "../components/PhoneFrame";
+import ElasticScroll from "../components/ElasticScroll";
 import { getProductById, useApp } from "../context/AppContext";
 import { BackIcon, CartIcon, HeartIcon } from "../components/icons";
 
@@ -80,8 +81,8 @@ export default function Product() {
       </div>
 
       {/* Details */}
+      <ElasticScroll className="flex-1 min-h-0 px-7 pt-1 pb-4">
       <motion.div
-        className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-7 pt-1 pb-4"
         initial="initial"
         animate="animate"
         variants={{
@@ -143,6 +144,7 @@ export default function Product() {
           </motion.div>
         ))}
       </motion.div>
+      </ElasticScroll>
 
       {/* Sticky buy bar */}
       <motion.div

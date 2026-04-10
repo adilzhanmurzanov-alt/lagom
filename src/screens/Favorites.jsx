@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import PhoneFrame from "../components/PhoneFrame";
 import TopHeader from "../components/TopHeader";
+import ElasticScroll from "../components/ElasticScroll";
 import { useApp, getProductById } from "../context/AppContext";
 import { HeartIcon, PlusIcon } from "../components/icons";
 
@@ -34,7 +35,7 @@ export default function Favorites() {
           </button>
         </div>
       ) : (
-        <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5 pt-1 pb-8">
+        <ElasticScroll className="flex-1 min-h-0 px-5 pt-1 pb-8">
           <div className="grid grid-cols-2 gap-4">
             {items.map((p) => (
               <article
@@ -85,7 +86,7 @@ export default function Favorites() {
               </article>
             ))}
           </div>
-        </div>
+        </ElasticScroll>
       )}
     </PhoneFrame>
   );

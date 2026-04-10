@@ -120,15 +120,48 @@ const armchairs = [
   },
 ];
 
+// Duplicate each base list with unique ids/name suffixes so product grids
+// are meaningfully scrollable (demo content only).
+const PRICE_VARIANTS = [0, -3200, 4100, -1800, 2700, -4500];
+const NAME_SUFFIX = ["", " II", " Nordic", " Classic", " Edition", " Pro"];
+
+function expand(base, times = 4) {
+  const out = [];
+  for (let copy = 0; copy < times; copy++) {
+    base.forEach((p, i) => {
+      const basePriceNum = parseInt(
+        String(p.price).replace(/[^\d]/g, ""),
+        10
+      );
+      const delta = PRICE_VARIANTS[(copy + i) % PRICE_VARIANTS.length];
+      const newPrice =
+        (basePriceNum + delta).toLocaleString("ru-RU") + " ₽";
+      out.push({
+        ...p,
+        id: copy === 0 ? p.id : `${p.id}-${copy + 1}`,
+        name: p.name + NAME_SUFFIX[copy % NAME_SUFFIX.length],
+        price: copy === 0 ? p.price : newPrice,
+      });
+    });
+  }
+  return out;
+}
+
+const sofasX = expand(sofas, 4);
+const chairsX = expand(chairs, 4);
+const tablesX = expand(tables, 5);
+const lampsX = expand(lamps, 5);
+const armchairsX = expand(armchairs, 5);
+
 export const CATEGORIES = {
-  sofas: { slug: "sofas", label: "Диваны", products: sofas },
-  chairs: { slug: "chairs", label: "Стулья", products: chairs },
-  tables: { slug: "tables", label: "Столы", products: tables },
-  lamps: { slug: "lamps", label: "Торшеры", products: lamps },
-  armchairs: { slug: "armchairs", label: "Кресла", products: armchairs },
+  sofas: { slug: "sofas", label: "Диваны", products: sofasX },
+  chairs: { slug: "chairs", label: "Стулья", products: chairsX },
+  tables: { slug: "tables", label: "Столы", products: tablesX },
+  lamps: { slug: "lamps", label: "Торшеры", products: lampsX },
+  armchairs: { slug: "armchairs", label: "Кресла", products: armchairsX },
   all: {
     slug: "all",
     label: "Вся коллекция",
-    products: [...sofas, ...chairs, ...tables, ...lamps, ...armchairs],
+    products: [...sofasX, ...chairsX, ...tablesX, ...lampsX, ...armchairsX],
   },
 };
