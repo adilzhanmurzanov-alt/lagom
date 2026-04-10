@@ -1,8 +1,11 @@
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import PhoneFrame from "../components/PhoneFrame";
 import { useApp } from "../context/AppContext";
 import { CartIcon, HeartIcon } from "../components/icons";
 import { asset } from "../utils/asset";
+
+const ease = [0.22, 1, 0.36, 1];
 
 const HERO = asset("chairs2.jpg");
 
@@ -34,9 +37,22 @@ function ArrowIcon({ className = "" }) {
   );
 }
 
+const tileVariants = {
+  initial: { opacity: 0, y: 18, scale: 0.96 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.55, ease },
+  },
+};
+
 function Tile({ label, image, onClick, className = "", children }) {
   return (
-    <button
+    <motion.button
+      variants={tileVariants}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.97 }}
       type="button"
       onClick={onClick}
       className={`group relative overflow-hidden rounded-[26px] bg-cream-50 ring-1 ring-ink/15 hover:ring-ink/35 transition-colors text-left ${className}`}
@@ -64,7 +80,7 @@ function Tile({ label, image, onClick, className = "", children }) {
           <ArrowIcon className="text-cream-50/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.35)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         </div>
       )}
-    </button>
+    </motion.button>
   );
 }
 
@@ -76,13 +92,21 @@ export default function Home() {
     <PhoneFrame>
       {/* Hero section */}
       <div className="relative h-[42%] min-h-[300px] shrink-0 bg-cream-100">
-        <img
+        <motion.img
           src={HERO}
           alt=""
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.2, ease }}
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-cream-50" />
-        <div className="relative h-full flex items-start justify-between px-7 pt-11">
+        <motion.div
+          className="relative h-full flex items-start justify-between px-7 pt-11"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease, delay: 0.3 }}
+        >
           <button
             type="button"
             onClick={() => navigate("/")}
@@ -91,40 +115,74 @@ export default function Home() {
             lagom
           </button>
           <div className="flex gap-2">
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               type="button"
               onClick={() => navigate("/favorites")}
               aria-label="Избранное"
               className="relative h-10 w-10 rounded-full bg-cream-50 ring-1 ring-ink/15 flex items-center justify-center text-ink hover:ring-ink/35 transition-colors"
             >
               <HeartIcon size={16} />
-              {favoritesCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 rounded-full bg-ink text-cream-50 text-[10px] font-medium flex items-center justify-center">
-                  {favoritesCount}
-                </span>
-              )}
-            </button>
-            <button
+              <AnimatePresence>
+                {favoritesCount > 0 && (
+                  <motion.span
+                    key={favoritesCount}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                    className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 rounded-full bg-ink text-cream-50 text-[10px] font-medium flex items-center justify-center"
+                  >
+                    {favoritesCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               type="button"
               onClick={() => navigate("/cart")}
               aria-label="Корзина"
               className="relative h-10 w-10 rounded-full bg-cream-50 ring-1 ring-ink/15 flex items-center justify-center text-ink hover:ring-ink/35 transition-colors"
             >
               <CartIcon size={18} />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 rounded-full bg-ink text-cream-50 text-[10px] font-medium flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </button>
+              <AnimatePresence>
+                {cartCount > 0 && (
+                  <motion.span
+                    key={cartCount}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                    className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 rounded-full bg-ink text-cream-50 text-[10px] font-medium flex items-center justify-center"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Body — AI consultant + bento grid */}
-      <div className="flex-1 min-h-0 flex flex-col px-5 pb-7 pt-1 gap-3">
+      <motion.div
+        className="flex-1 min-h-0 flex flex-col px-5 pb-7 pt-1 gap-3"
+        initial="initial"
+        animate="animate"
+        variants={{
+          animate: {
+            transition: { staggerChildren: 0.08, delayChildren: 0.45 },
+          },
+        }}
+      >
         {/* AI consultant pill */}
-        <button
+        <motion.button
+          variants={{
+            initial: { opacity: 0, y: 14 },
+            animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease } },
+          }}
+          whileTap={{ scale: 0.98 }}
           type="button"
           onClick={() => navigate("/assistant")}
           className="group w-full h-[58px] shrink-0 rounded-full bg-cream-50 ring-1 ring-ink/15 hover:ring-ink/35 transition-colors flex items-center px-5 gap-3"
@@ -160,12 +218,24 @@ export default function Home() {
             <path d="M5 12h14" />
             <path d="M13 5l7 7-7 7" />
           </svg>
-        </button>
+        </motion.button>
 
         {/* Bento grid */}
-        <div className="flex-1 min-h-0 flex flex-col gap-3">
+        <motion.div
+          className="flex-1 min-h-0 flex flex-col gap-3"
+          variants={{
+            animate: {
+              transition: { staggerChildren: 0.06 },
+            },
+          }}
+        >
           {/* Row 1: Диваны (wide with photo) + Торшеры */}
-          <div className="flex gap-3 flex-1 min-h-0">
+          <motion.div
+            className="flex gap-3 flex-1 min-h-0"
+            variants={{
+              animate: { transition: { staggerChildren: 0.05 } },
+            }}
+          >
             <Tile
               label="ДИВАНЫ"
               image={TILE_IMG.sofa}
@@ -178,10 +248,13 @@ export default function Home() {
               onClick={() => navigate("/store/lamps")}
               className="flex-1"
             />
-          </div>
+          </motion.div>
 
           {/* Row 2 */}
-          <div className="grid grid-cols-2 gap-3 flex-1 min-h-0">
+          <motion.div
+            className="grid grid-cols-2 gap-3 flex-1 min-h-0"
+            variants={{ animate: { transition: { staggerChildren: 0.05 } } }}
+          >
             <Tile
               label="СТУЛЬЯ"
               image={TILE_IMG.chair}
@@ -192,10 +265,13 @@ export default function Home() {
               image={TILE_IMG.table}
               onClick={() => navigate("/store/tables")}
             />
-          </div>
+          </motion.div>
 
           {/* Row 3 */}
-          <div className="grid grid-cols-2 gap-3 flex-1 min-h-0">
+          <motion.div
+            className="grid grid-cols-2 gap-3 flex-1 min-h-0"
+            variants={{ animate: { transition: { staggerChildren: 0.05 } } }}
+          >
             <Tile
               label="КРЕСЛА"
               image={TILE_IMG.armchair}
@@ -206,9 +282,9 @@ export default function Home() {
               image={TILE_IMG.more}
               onClick={() => navigate("/store/all")}
             />
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
     </PhoneFrame>
   );
 }

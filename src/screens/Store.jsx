@@ -1,8 +1,11 @@
 import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import PhoneFrame from "../components/PhoneFrame";
 import { CATEGORIES } from "../data/store";
 import { useApp } from "../context/AppContext";
 import { HeartIcon } from "../components/icons";
+
+const ease = [0.22, 1, 0.36, 1];
 
 function pluralize(n, [one, few, many]) {
   const mod10 = n % 10;
@@ -67,11 +70,20 @@ export default function Store() {
             <circle cx="17" cy="20" r="1.2" />
             <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.2a2 2 0 0 0 2-1.6L20.5 8H6" />
           </Icon>
-          {cartCount > 0 && (
-            <span className="absolute -top-1 -right-2 h-[18px] min-w-[18px] px-1 rounded-full bg-ink text-cream-50 text-[10px] font-medium flex items-center justify-center">
-              {cartCount}
-            </span>
-          )}
+          <AnimatePresence>
+            {cartCount > 0 && (
+              <motion.span
+                key={cartCount}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                className="absolute -top-1 -right-2 h-[18px] min-w-[18px] px-1 rounded-full bg-ink text-cream-50 text-[10px] font-medium flex items-center justify-center"
+              >
+                {cartCount}
+              </motion.span>
+            )}
+          </AnimatePresence>
         </button>
       </div>
 
@@ -96,12 +108,32 @@ export default function Store() {
 
       {/* Products grid */}
       <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-8 no-scrollbar">
-        <div className="grid grid-cols-2 gap-4">
+        <motion.div
+          className="grid grid-cols-2 gap-4"
+          initial="initial"
+          animate="animate"
+          variants={{
+            animate: {
+              transition: { staggerChildren: 0.07, delayChildren: 0.15 },
+            },
+          }}
+        >
           {cat.products.map((p) => {
             const isFav = favorites.includes(p.id);
             return (
-              <article
+              <motion.article
                 key={p.id}
+                variants={{
+                  initial: { opacity: 0, y: 20, scale: 0.96 },
+                  animate: {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    transition: { duration: 0.55, ease },
+                  },
+                }}
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => navigate(`/product/${p.id}`)}
                 className="group cursor-pointer"
               >
@@ -112,7 +144,14 @@ export default function Store() {
                     loading="lazy"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
-                  <button
+                  <motion.button
+                    whileTap={{ scale: 0.85 }}
+                    animate={
+                      isFav
+                        ? { scale: [1, 1.25, 1] }
+                        : { scale: 1 }
+                    }
+                    transition={{ duration: 0.35, ease: "easeOut" }}
                     type="button"
                     aria-label="В избранное"
                     onClick={(e) => {
@@ -121,12 +160,12 @@ export default function Store() {
                     }}
                     className={
                       isFav
-                        ? "absolute top-3 right-3 h-8 w-8 rounded-full bg-ink text-cream-50 flex items-center justify-center transition-colors"
+                        ? "absolute top-3 right-3 h-8 w-8 rounded-full bg-ink text-cream-50 flex items-center justify-center"
                         : "absolute top-3 right-3 h-8 w-8 rounded-full bg-cream-50 ring-1 ring-ink/15 text-ink/80 hover:text-ink hover:ring-ink/40 flex items-center justify-center transition-colors"
                     }
                   >
                     <HeartIcon size={15} filled={isFav} />
-                  </button>
+                  </motion.button>
                 </div>
                 <div className="mt-3 px-1 flex items-start justify-between gap-2">
                   <div className="min-w-0">
@@ -137,25 +176,27 @@ export default function Store() {
                       {p.price}
                     </div>
                   </div>
-                  <button
+                  <motion.button
+                    whileTap={{ scale: 0.85 }}
+                    whileHover={{ scale: 1.08 }}
                     type="button"
                     aria-label="В корзину"
                     onClick={(e) => {
                       e.stopPropagation();
                       addToCart(p.id);
                     }}
-                    className="shrink-0 h-9 w-9 rounded-full bg-ink text-cream-50 flex items-center justify-center hover:scale-[1.05] active:scale-95 transition-transform"
+                    className="shrink-0 h-9 w-9 rounded-full bg-ink text-cream-50 flex items-center justify-center"
                   >
                     <Icon size={15}>
                       <path d="M12 5v14" />
                       <path d="M5 12h14" />
                     </Icon>
-                  </button>
+                  </motion.button>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </PhoneFrame>
   );

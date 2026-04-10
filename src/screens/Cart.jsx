@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import PhoneFrame from "../components/PhoneFrame";
 import TopHeader from "../components/TopHeader";
 import {
@@ -8,6 +9,8 @@ import {
   formatPrice,
 } from "../context/AppContext";
 import { CartIcon, MinusIcon, PlusIcon } from "../components/icons";
+
+const ease = [0.22, 1, 0.36, 1];
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -50,9 +53,14 @@ export default function Cart() {
       ) : (
         <>
           <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar px-5 pt-1 pb-4">
-            {items.map(({ product, qty }) => (
-              <article
+            <AnimatePresence initial={false}>
+            {items.map(({ product, qty }, index) => (
+              <motion.article
                 key={product.id}
+                layout
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0, transition: { duration: 0.45, ease, delay: index * 0.05 } }}
+                exit={{ opacity: 0, x: 40, transition: { duration: 0.3, ease } }}
                 className="flex gap-4 py-4 border-b border-ink/10 last:border-0"
               >
                 <button
@@ -102,12 +110,18 @@ export default function Cart() {
                     </button>
                   </div>
                 </div>
-              </article>
+              </motion.article>
             ))}
+            </AnimatePresence>
           </div>
 
           {/* Summary + checkout */}
-          <div className="shrink-0 px-6 pt-4 pb-6 border-t border-ink/10">
+          <motion.div
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.55, ease, delay: 0.2 }}
+            className="shrink-0 px-6 pt-4 pb-6 border-t border-ink/10"
+          >
             <div className="space-y-1.5 text-[13px]">
               <div className="flex justify-between text-ink/70">
                 <span>Товары</span>
@@ -124,14 +138,16 @@ export default function Cart() {
                 </span>
               </div>
             </div>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
               type="button"
               onClick={() => navigate("/checkout")}
-              className="mt-4 w-full h-14 rounded-full bg-ink text-cream-50 text-[13px] font-medium tracking-wide uppercase hover:scale-[1.01] active:scale-95 transition-transform"
+              className="mt-4 w-full h-14 rounded-full bg-ink text-cream-50 text-[13px] font-medium tracking-wide uppercase"
             >
               Оформить заказ
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </>
       )}
     </PhoneFrame>
