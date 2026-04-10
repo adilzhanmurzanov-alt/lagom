@@ -20,8 +20,8 @@ export default function GetStarted() {
       </div>
 
       {/* Headline */}
-      <div className="px-8 pt-7">
-        <h1 className="font-display font-light text-ink text-[44px] leading-[1.04] tracking-[-0.02em]">
+      <div className="px-8 pt-6 shrink-0">
+        <h1 className="font-display font-light text-ink text-[38px] sm:text-[44px] leading-[1.05] tracking-[-0.02em]">
           Простая
           <br />
           элегантная
@@ -30,9 +30,10 @@ export default function GetStarted() {
         </h1>
       </div>
 
-      {/* Hero image — rounded via wrapper so nothing can escape the clip */}
-      <div className="relative flex-1 flex items-center justify-center min-h-0 px-6 pt-4 pb-2">
-        <div className="relative w-full max-w-[320px] aspect-[5/6] rounded-[28px] overflow-hidden ring-1 ring-black/5 shadow-[0_30px_60px_-20px_rgba(40,20,0,0.35)]">
+      {/* Hero image — size by AVAILABLE HEIGHT, not width, so it never
+          overflows its flex slot on shorter viewports (e.g. Android). */}
+      <div className="relative flex-1 min-h-0 flex items-center justify-center px-6 py-2">
+        <div className="relative h-full aspect-[5/6] max-w-full rounded-[28px] overflow-hidden ring-1 ring-black/5 shadow-[0_30px_60px_-20px_rgba(40,20,0,0.35)]">
           <img
             src={HERO_IMG}
             alt=""
