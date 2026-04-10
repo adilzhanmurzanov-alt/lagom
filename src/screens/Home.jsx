@@ -2,16 +2,17 @@ import { useNavigate } from "react-router-dom";
 import PhoneFrame from "../components/PhoneFrame";
 import { useApp } from "../context/AppContext";
 import { CartIcon, HeartIcon } from "../components/icons";
+import { asset } from "../utils/asset";
 
-const HERO = "/chairs2.jpg";
+const HERO = asset("chairs2.jpg");
 
 const TILE_IMG = {
-  sofa: "/tiles/sofa.jpg",
-  lamp: "/tiles/lamp.jpg",
-  chair: "/tiles/chair.jpg",
-  table: "/tiles/table.jpg",
-  armchair: "/tiles/armchair.jpg",
-  more: "/tiles/more.jpg",
+  sofa: asset("tiles/sofa.jpg"),
+  lamp: asset("tiles/lamp.jpg"),
+  chair: asset("tiles/chair.jpg"),
+  table: asset("tiles/table.jpg"),
+  armchair: asset("tiles/armchair.jpg"),
+  more: asset("tiles/more.jpg"),
 };
 
 function ArrowIcon({ className = "" }) {

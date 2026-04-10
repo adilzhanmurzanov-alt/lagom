@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import PhoneFrame from "../components/PhoneFrame";
+import { asset } from "../utils/asset";
 
-const HERO_IMG = "/hero-chair.png";
+const HERO_IMG = asset("hero-chair.png");
 
 export default function GetStarted() {
   const navigate = useNavigate();
